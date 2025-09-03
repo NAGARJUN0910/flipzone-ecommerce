@@ -104,7 +104,7 @@ Customer:
 
 👤 Author
 NAGARJUN B N
-💼 Java Full Stack Developer | ☁️ Cloud Enthusiast | 💡 Problem Solver
+💼 Java Full Stack Developer | 👨‍💻 Software Developer (Fresher) | 💡 Problem Solver  
 🔗 [Portfolio](https://nagarjun0910.github.io/portfolio0910/)
  | [LinkedIn](https://www.linkedin.com/in/nagarjun-b-n-909b69290/)
  | [GitHub](https://github.com/NAGARJUN0910/NAGARJUN0910)
