@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products - FlipZone</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-primary: #f8fafc;
+        --bg-secondary: #e2e8f0;
+        --bg-card: #ffffff;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --accent: #3b82f6;
+        --accent-hover: #2563eb;
+        --success: #10b981;
+        --danger: #ef4444;
+        --border: #cbd5e1;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Navbar */
+      .navbar {
+        background-color: var(--bg-secondary);
+        border-bottom: 1px solid var(--border);
+        padding: 0.75rem 0;
+      }
+      .navbar-brand {
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: var(--accent) !important;
+        text-decoration: none;
+      }
+      .navbar-brand:hover {
+        color: var(--accent-hover) !important;
+      }
+      .btn-outline-danger {
+        color: var(--danger);
+        border-color: var(--danger);
+        padding: 0.4rem 1rem;
+        font-weight: 500;
+      }
+      .btn-outline-danger:hover {
+        background-color: var(--danger);
+        color: white;
+      }
+
+      /* Alert */
+      .alert-container {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        z-index: 1050;
+        max-width: 350px;
+      }
+      .alert {
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        color: white;
+        margin-bottom: 0.5rem;
+        animation: slideInRight 0.6s ease;
+      }
+      .alert-success {
+        background-color: var(--success);
+      }
+      .alert-danger {
+        background-color: var(--danger);
+      }
+      .alert-info {
+        background-color: var(--accent);
+      }
+
+      @keyframes slideInRight {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      /* Main Content */
+      .main-content {
+        flex: 1;
+        padding: 2rem 0;
+      }
+
+      /* Search & Sort Section */
+      .search-sort-section {
+        background-color: var(--bg-secondary);
+        padding: 1.5rem 0;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 2rem;
+      }
+      .search-form {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .form-control {
+        background-color: #fff;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        color: var(--text-primary);
+        font-size: 0.9rem;
+      }
+      .form-control:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+      }
+      .btn-search {
+        background-color: var(--accent);
+        border: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        border-radius: 8px;
+      }
+      .btn-search:hover {
+        background-color: var(--accent-hover);
+      }
+      .btn-sort {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border);
+        color: var(--text-primary);
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+      }
+      .btn-sort:hover {
+        background-color: var(--accent);
+        color: white;
+      }
+
+      /* Product Cards */
+      .product-card {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeUp 0.6s ease forwards;
+        opacity: 0;
+      }
+      .product-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+      }
+      @keyframes fadeUp {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      .product-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+      .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+      .card-text {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+      }
+      .product-price {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--success);
+      }
+      .btn-primary {
+        background-color: var(--accent);
+        border: none;
+        width: 100%;
+      }
+      .btn-primary:hover {
+        background-color: var(--accent-hover);
+      }
+
+      /* Pagination */
+      .pagination {
+        --bs-pagination-bg: var(--bg-card);
+        --bs-pagination-border-color: var(--border);
+        --bs-pagination-color: var(--text-primary);
+        --bs-pagination-hover-bg: var(--accent);
+        --bs-pagination-hover-color: #fff;
+        --bs-pagination-active-bg: var(--accent);
+        --bs-pagination-active-color: #fff;
+      }
+
+      /* Footer */
+      .footer {
+        background-color: var(--bg-secondary);
+        color: var(--text-secondary);
+        padding: 1.5rem 0;
+        text-align: center;
+        border-top: 1px solid var(--border);
+        margin-top: auto;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .search-form {
+          flex-direction: column;
+        }
+        .product-img {
+          height: 180px;
+        }
+        .alert-container {
+          right: 10px;
+          left: 10px;
+          max-width: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a href="/customer/home" class="navbar-brand">
+          <i class="bi bi-shop"></i> FlipZone
+        </a>
+        <div>
+          <a href="/logout" class="btn btn-outline-danger">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Alerts -->
+    <div class="alert-container">
+      <div th:if="${session.pass}" class="alert alert-success">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <span th:text="${session.pass}"></span>
+      </div>
+      <div th:if="${session.fail}" class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <span th:text="${session.fail}"></span>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="main-content">
+      <!-- Search & Sort -->
+      <section class="search-sort-section">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-md-6 mb-3 mb-md-0">
+              <form action="/customer/view-products" class="search-form">
+                <input
+                  type="text"
+                  name="name"
+                  class="form-control"
+                  placeholder="Search products..."
+                />
+                <button type="submit" class="btn btn-search">
+                  <i class="bi bi-search"></i> Search
+                </button>
+              </form>
+            </div>
+            <div class="col-md-6 text-md-end">
+              <a href="/customer/view-products?sort=price" class="btn-sort">
+                <i class="bi bi-sort-numeric-up"></i> Low → High
+              </a>
+              <a
+                href="/customer/view-products?sort=price&desc=true"
+                class="btn-sort"
+              >
+                <i class="bi bi-sort-numeric-down"></i> High → Low
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Products -->
+      <section class="container">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          <div class="col" th:each="product:${products}">
+            <div class="card product-card">
+              <img
+                th:src="${product.imageLink}"
+                class="product-img"
+                th:alt="${product.name}"
+                onerror="this.src='https://via.placeholder.com/400x200/e2e8f0/64748b?text=No+Image'"
+              />
+              <div class="card-body">
+                <h5 class="card-title" th:text="${product.name}"></h5>
+                <p class="card-text" th:text="${product.description}"></p>
+                <p>
+                  <span class="product-price">₹<span th:text="${product.price}"></span></span>
+                </p>
+                <a
+                  th:href="'/customer/add-to-cart/'+${product.id}"
+                  th:if="${product.stock > 0}"
+                >
+                  <button class="btn btn-primary">
+                    <i class="bi bi-cart-plus"></i> Add to Cart
+                  </button>
+                </a>
+                <button th:if="${product.stock == 0}" disabled class="btn btn-primary">
+                  <i class="bi bi-cart-x"></i> Out of Stock
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2025 FlipZone. Made with <i class="bi bi-heart-fill text-danger"></i></p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Animate product cards in sequence
+        const cards = document.querySelectorAll(".product-card");
+        cards.forEach((card, index) => {
+          card.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Auto-hide alerts after 5s
+        setTimeout(() => {
+          document.querySelectorAll(".alert").forEach((alert) => {
+            alert.style.opacity = "0";
+            alert.style.transition = "opacity 0.5s";
+            setTimeout(() => alert.remove(), 500);
+          });
+        }, 5000);
+      });
+    </script>
+  </body>
+</html>

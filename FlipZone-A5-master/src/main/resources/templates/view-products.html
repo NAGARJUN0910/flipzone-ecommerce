@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Products - FlipZone Admin</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-primary: #e0f2fe;
+        --bg-secondary: #bae6fd;
+        --bg-card: #f0f9ff;
+        --text-primary: #0f172a;
+        --text-secondary: #334155;
+        --accent: #0284c7;
+        --accent-hover: #0369a1;
+        --success: #16a34a;
+        --danger: #dc2626;
+        --warning: #f59e0b;
+        --border: #cbd5e1;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+        color: var(--text-primary);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .navbar {
+        background-color: var(--bg-secondary);
+        border-bottom: 2px solid var(--border);
+        padding: 0.8rem 0;
+        transition: background 0.3s ease;
+      }
+
+      .navbar-brand {
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: var(--accent) !important;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-outline-danger {
+        color: var(--danger);
+        border-color: var(--danger);
+        transition: all 0.2s ease;
+      }
+
+      .btn-outline-danger:hover {
+        background-color: var(--danger);
+        color: white;
+      }
+
+      /* Page Header */
+      .page-header {
+        background: var(--bg-card);
+        padding: 2rem 1rem;
+        border-bottom: 2px solid var(--border);
+        text-align: center;
+        animation: fadeInDown 0.8s ease;
+      }
+
+      .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .page-subtitle {
+        color: var(--text-secondary);
+        font-size: 1rem;
+      }
+
+      /* Table Container */
+      .table-container {
+        background: var(--bg-card);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        margin-top: 2rem;
+        animation: fadeInUp 0.8s ease;
+      }
+
+      .table-header {
+        background: var(--bg-secondary);
+        padding: 1rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .table-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .btn-add {
+        background: var(--success);
+        border: none;
+        color: white;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .btn-add:hover {
+        background: #15803d;
+      }
+
+      /* Table */
+      .custom-table th {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        font-weight: 600;
+        text-align: center;
+      }
+
+      .custom-table td {
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      .custom-table tbody tr {
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .custom-table tbody tr:hover {
+        background: var(--bg-secondary);
+        transform: scale(1.01);
+      }
+
+      .product-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        object-fit: cover;
+        border: 1px solid var(--border);
+      }
+
+      .product-name {
+        font-weight: 600;
+        color: var(--accent-hover);
+      }
+
+      .product-price {
+        color: var(--success);
+        font-weight: 600;
+      }
+
+      /* Action Buttons */
+      .btn-edit {
+        background: var(--warning);
+        color: white;
+        border-radius: 6px;
+        padding: 0.4rem 0.8rem;
+        transition: transform 0.2s ease;
+      }
+
+      .btn-edit:hover {
+        background: #d97706;
+        transform: scale(0.95);
+      }
+
+      .btn-delete {
+        background: var(--danger);
+        color: white;
+        border-radius: 6px;
+        padding: 0.4rem 0.8rem;
+        transition: transform 0.2s ease;
+      }
+
+      .btn-delete:hover {
+        background: #b91c1c;
+        transform: scale(0.95);
+      }
+
+      /* Empty State */
+      .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: var(--text-secondary);
+      }
+
+      .empty-state i {
+        font-size: 4rem;
+        color: var(--border);
+      }
+
+      .footer {
+        text-align: center;
+        padding: 1.2rem;
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-top: auto;
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="/admin/home">
+          <i class="bi bi-shop"></i> FlipZone Admin
+        </a>
+        <a href="/logout" class="btn btn-outline-danger">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+      <div class="container">
+        <h1 class="page-title"><i class="bi bi-box-seam"></i> Product Management</h1>
+        <p class="page-subtitle">Manage all products in your store</p>
+      </div>
+    </section>
+
+    <!-- Products Table -->
+    <div class="container">
+      <div class="table-container">
+        <div class="table-header">
+          <h2 class="table-title">All Products</h2>
+          <a href="/admin/add-product" class="btn-add">
+            <i class="bi bi-plus-circle"></i> Add Product
+          </a>
+        </div>
+        <div class="table-responsive">
+          <table class="table custom-table align-middle" th:if="${!products.isEmpty()}">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="product : ${products}">
+                <td><span class="product-name" th:text="${product.name}">Sample</span></td>
+                <td th:text="${product.description}">Description</td>
+                <td>
+                  <img th:src="${product.imageLink}" class="product-image" onerror="this.src='https://via.placeholder.com/60?text=No+Image'" />
+                </td>
+                <td th:text="${product.stock}">0</td>
+                <td><span class="product-price">₹<span th:text="${product.price}">0.00</span></span></td>
+                <td>
+                  <a th:href="'/admin/edit-product/' + ${product.id}" class="btn btn-edit btn-sm"><i class="bi bi-pencil"></i> Edit</a>
+                  <a th:href="'/admin/delete-product/' + ${product.id}" class="btn btn-delete btn-sm"><i class="bi bi-trash"></i> Delete</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- Empty state -->
+          <div th:if="${products.isEmpty()}" class="empty-state">
+            <i class="bi bi-box-seam"></i>
+            <h3>No Products Found</h3>
+            <p>Add your first product to get started</p>
+            <a href="/admin/add-product" class="btn-add"><i class="bi bi-plus-circle"></i> Add Product</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      &copy; 2025 FlipZone Admin Panel. Made with ❤️
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
